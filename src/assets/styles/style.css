@@ -44,7 +44,11 @@
     color: white;
 }
 
-
+.button:hover {
+    border: 1px solid white;
+    background-color: white;
+    color: grey;
+}
 
 .button-commands {
     background-color: #222222;
@@ -58,3 +62,30 @@
     width: 390px;
 }
 
+.button-active {
+    animation: touch  0.3s forwards ease-in-out;
+}
+
+@keyframes touch {
+    100% {
+        border: 1px solid rgb(18, 223, 18);
+        background-color: rgb(18, 223, 18);
+        border-radius: 40px;
+    }
+}
+
+.arrow-up {
+    background-image: url(../icons/UpWhite.svg);
+}
+
+.arrow-left {
+    background-image: url(../icons/LeftWhite.svg);
+}
+
+.arrow-right {
+    background-image: url(../icons/RightWhite.svg);
+}
+
+.arrow-down {
+    background-image: url(../icons/DownWhite.svg);
+}

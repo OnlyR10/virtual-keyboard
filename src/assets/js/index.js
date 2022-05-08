@@ -124,6 +124,23 @@ for(let i = 0; i < allSymbolsInKeyBoard.length; i++) {
     keyboard.append(button);
 }
 
+const buttonsChange = keyboard.querySelectorAll(".data-btn-change");
+
+document.addEventListener("keydown", (event) => {
+    const keyboardAllButtons = Array.from(keyboard.querySelectorAll("div"));
+    btnActive = keyboardAllButtons.find((elem) => {
+        return elem.getAttribute("data-btn-name") === event.code;
+    });
+    if(btnActive) {
+        btnActive.classList.add("button-active");
+    }
+})
+
+document.addEventListener("keyup", (event) => {
+    if(btnActive) {
+        btnActive.classList.remove("button-active");
+    }
+})
 
 wrapper.append(textArea);
 wrapper.append(keyboard);
