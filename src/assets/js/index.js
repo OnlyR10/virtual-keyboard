@@ -134,6 +134,32 @@ document.addEventListener("keydown", (event) => {
     if(btnActive) {
         btnActive.classList.add("button-active");
     }
+
+    if(event.ctrlKey && event.altKey) {
+        if(keyboardLang === "eng") {
+            if(capsLockActive) {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = rusLetterLayout[i].toUpperCase();
+                }
+            } else {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = rusLetterLayout[i];
+                }
+            }
+            keyboardLang = "rus";
+        } else if(keyboardLang === "rus") {
+            if(capsLockActive) {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = engLetterLayout[i].toUpperCase();
+                }
+            } else {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = engLetterLayout[i];
+                }
+            }
+            keyboardLang = "eng";
+        }
+    }
 })
 
 document.addEventListener("keyup", (event) => {
