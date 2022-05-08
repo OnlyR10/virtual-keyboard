@@ -160,11 +160,31 @@ document.addEventListener("keydown", (event) => {
             keyboardLang = "eng";
         }
     }
+
+    if(event.key === "CapsLock") {
+        if(capsLockActive) {
+            for(let i = 0; i < buttonsChange.length; i++) {
+                buttonsChange[i].textContent = buttonsChange[i].textContent.toLowerCase();
+            }
+        } else {
+            for(let i = 0; i < buttonsChange.length; i++) {
+                buttonsChange[i].textContent = buttonsChange[i].textContent.toUpperCase();
+            }
+        }
+    }
 })
 
 document.addEventListener("keyup", (event) => {
     if(btnActive) {
         btnActive.classList.remove("button-active");
+    }
+
+    if(event.key === "CapsLock") {
+        if(capsLockActive) {
+            capsLockActive = false;
+        } else {
+            capsLockActive = true;
+        }
     }
 })
 
