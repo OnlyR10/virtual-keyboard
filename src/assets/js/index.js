@@ -126,6 +126,20 @@ for(let i = 0; i < allSymbolsInKeyBoard.length; i++) {
 
 const buttonsChange = keyboard.querySelectorAll(".data-btn-change");
 
+// keyboard.addEventListener("mousedown", (event) => {
+//     if(event.target.classList.contains("button")) {
+//         textArea.focus();
+//         textArea.value += `${event.target.textContent}`;       
+//     }
+// })
+
+keyboard.addEventListener("click", (event) => {
+    if(event.target.classList.contains("button")) {
+        textArea.focus();
+        textArea.value += `${event.target.textContent}`;       
+    }
+})
+
 document.addEventListener("keydown", (event) => {
     const keyboardAllButtons = Array.from(keyboard.querySelectorAll("div"));
     btnActive = keyboardAllButtons.find((elem) => {
