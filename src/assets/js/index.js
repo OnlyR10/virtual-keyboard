@@ -135,6 +135,31 @@ document.addEventListener("keydown", (event) => {
         btnActive.classList.add("button-active");
     }
 
+    if(event.shiftKey) {
+        if(keyboardLang === "eng") {
+            if(capsLockActive) {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = engLetterLayoutShift[i].toLowerCase();
+                }
+            } else {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = engLetterLayoutShift[i].toUpperCase();
+                }
+            }
+        } else if(keyboardLang === "rus") {
+            if(capsLockActive) {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = rusLetterLayoutShift[i].toLowerCase();
+                }
+            } else {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    buttonsChange[i].textContent = rusLetterLayoutShift[i].toUpperCase();
+                }
+            }
+        }
+    }
+
+
     if(event.ctrlKey && event.altKey) {
         if(keyboardLang === "eng") {
             if(capsLockActive) {
@@ -184,6 +209,46 @@ document.addEventListener("keyup", (event) => {
             capsLockActive = false;
         } else {
             capsLockActive = true;
+        }
+    }
+
+    if(event.key === "Shift") {
+        if(keyboardLang === "eng") {
+            if(capsLockActive) {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    if(typeof engLetterLayout[i] === "number") {
+                        buttonsChange[i].textContent = engLetterLayout[i];
+                        continue;
+                    }
+                    buttonsChange[i].textContent = engLetterLayout[i].toUpperCase();
+                }
+            } else {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    if(typeof engLetterLayout[i] === "number") {
+                        buttonsChange[i].textContent = engLetterLayout[i];
+                        continue;
+                    }
+                    buttonsChange[i].textContent = engLetterLayout[i].toLowerCase();
+                }
+            }
+        } else if(keyboardLang === "rus") {
+            if(capsLockActive) {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    if(typeof engLetterLayout[i] === "number") {
+                        buttonsChange[i].textContent = rusLetterLayout[i];
+                        continue;
+                    }
+                    buttonsChange[i].textContent = rusLetterLayout[i].toUpperCase();
+                }
+            } else {
+                for(let i = 0; i < buttonsChange.length; i++) {
+                    if(typeof engLetterLayout[i] === "number") {
+                        buttonsChange[i].textContent = rusLetterLayout[i];
+                        continue;
+                    }
+                    buttonsChange[i].textContent = rusLetterLayout[i].toLowerCase();
+                }
+            }
         }
     }
 })
