@@ -23,6 +23,14 @@ textArea.classList.add('text-area');
 const keyboard = document.createElement('div');
 keyboard.classList.add('keyboard');
 
+const systemHint = document.createElement('p');
+systemHint.classList.add('hint');
+systemHint.textContent = 'Клавиатура создана в операционной системе Windows';
+
+const combinationHint = document.createElement('p');
+combinationHint.classList.add('hint');
+combinationHint.textContent = 'Язык клавиатуры переключается комбинацией: "Ctrl" + "Alt"';
+
 function buildAKeyboard(languageLayout, letters) {
   for (let i = 0; i < languageLayout.length; i += 1) {
     const button = document.createElement('div');
@@ -286,4 +294,6 @@ document.addEventListener('keyup', (event) => {
 
 wrapper.append(textArea);
 wrapper.append(keyboard);
+wrapper.append(combinationHint);
+wrapper.append(systemHint);
 document.body.append(wrapper);
