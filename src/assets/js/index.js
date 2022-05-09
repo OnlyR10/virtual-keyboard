@@ -16,11 +16,11 @@ for (let i = 1072; i < 1104; i += 1) {
   rusLetters.push(String.fromCodePoint(i));
 }
 
-const symbols = ['`', '-', '=', '[', ']', '\\', ';', '\'', ',', '.', '/'];
+const symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '\\', '|', ';', ':', '\'', '"', '/', ',', '<', '.', '>', '?'];
 
 const commands = [
-  'Backspace', 'Tab', 'Delete', 'CapsLock', 'Enter', 'ShiftLeft', 'ShiftRight', 'ArrowUp',
-  'ControlLeft', 'ControlRight', 'Win', 'AltLeft', 'AltRight', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight',
+  'Backspace', 'Tab', 'Delete', 'CapsLock', 'Enter', 'ShiftLeft', 'ArrowUp', 'ShiftRight',
+  'ControlLeft', 'Win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight',
 ];
 
 const engLetterLayout = [
@@ -32,7 +32,7 @@ const engLetterLayout = [
 const engLetterLayoutShift = [
   '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
   'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '{', '}', '|',
-  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '\'',
+  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '"',
   'z', 'x', 'c', 'v', 'b', 'n', 'm', '<', '>', '?'];
 
 const rusLetterLayout = [
@@ -121,6 +121,7 @@ for (let i = 0; i < allSymbolsInKeyBoard.length; i += 1) {
 }
 
 const buttonsChange = keyboard.querySelectorAll('.data-btn-change');
+const keyboardAllButtons = Array.from(keyboard.querySelectorAll('div'));
 
 // keyboard.addEventListener('mousedown', (event) => {
 //     if(event.target.classList.contains('button')) {
@@ -137,9 +138,9 @@ keyboard.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  const keyboardAllButtons = Array.from(keyboard.querySelectorAll('div'));
+  event.preventDefault();
   btnActive = keyboardAllButtons.find((elem) => {
-    return elem.getAttribute('data-btn-name') === event.code;
+    return elem.getAttribute('data-btn-name') === event.code || elem.getAttribute('data-btn-name') === event.key || elem.getAttribute('data-btn-name').toLocaleUpperCase() === event.key;
   });
   if (btnActive) {
     btnActive.classList.add('button-active');
@@ -149,20 +150,44 @@ document.addEventListener('keydown', (event) => {
     if (keyboardLang === 'eng') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(engLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
+          }
+          if (numbers.includes(engLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
+          }
           buttonsChange[i].textContent = engLetterLayoutShift[i].toLowerCase();
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(engLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
+          }
+          if (numbers.includes(engLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
+          }
           buttonsChange[i].textContent = engLetterLayoutShift[i].toUpperCase();
         }
       }
     } else if (keyboardLang === 'rus') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(rusLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
+          }
+          if (numbers.includes(rusLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
+          }
           buttonsChange[i].textContent = rusLetterLayoutShift[i].toLowerCase();
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(rusLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
+          }
+          if (numbers.includes(rusLetterLayoutShift[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
+          }
           buttonsChange[i].textContent = rusLetterLayoutShift[i].toUpperCase();
         }
       }
@@ -209,8 +234,8 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
-  if (btnActive) {
-    btnActive.classList.remove('button-active');
+  for (let i = 0; i < keyboardAllButtons.length; i += 1) {
+    keyboardAllButtons[i].classList.remove('button-active');
   }
 
   if (event.key === 'CapsLock') {
@@ -225,6 +250,12 @@ document.addEventListener('keyup', (event) => {
     if (keyboardLang === 'eng') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(engLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
+          }
+          if (numbers.includes(engLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
+          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = engLetterLayout[i];
           } else {
@@ -233,6 +264,12 @@ document.addEventListener('keyup', (event) => {
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(engLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
+          }
+          if (numbers.includes(engLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
+          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = engLetterLayout[i];
           } else {
@@ -243,6 +280,12 @@ document.addEventListener('keyup', (event) => {
     } else if (keyboardLang === 'rus') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(rusLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
+          }
+          if (numbers.includes(rusLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
+          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = rusLetterLayout[i];
           } else {
@@ -251,6 +294,12 @@ document.addEventListener('keyup', (event) => {
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
+          if (symbols.includes(rusLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
+          }
+          if (numbers.includes(rusLetterLayout[i])) {
+            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
+          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = rusLetterLayout[i];
           } else {
