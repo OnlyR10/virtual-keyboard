@@ -103,8 +103,78 @@ const keyboardAllButtons = Array.from(keyboard.querySelectorAll('div'));
 keyboard.addEventListener('mousedown', (event) => {
   if (event.target.classList.contains('button')) {
     textArea.focus();
-    textArea.value += `${event.target.textContent}`;
+    switch (event.target.getAttribute('data-btn-name')) {
+      case 'Backspace':
+        if(textArea.selectionStart === textArea.selectionEnd) {
+          textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionStart);
+        } else {
+          textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd);
+        }
+        break;
+      case 'Tab':
+        textArea.value += `\t`;
+        break;
+      case 'Delete':
+        if(textArea.selectionStart === textArea.selectionEnd) {
+          textArea.setRangeText('', textArea.selectionStart, textArea.selectionStart + 1);
+        } else {
+          textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd);
+        }
+        break;
+      case 'CapsLock':
+      // textArea.value += `\n`;
+        break;
+      case 'Enter':
+        textArea.value += `\n`;
+        break;
+      case 'ShiftLeft':
+      // textArea.value += `\n`;
+        break;
+      case 'ShiftRight':
+      // textArea.value += `\n`;
+        break;
+      case 'ControlLeft':
+      // textArea.value += `\n`;
+        break;
+      case 'ControlRight':
+      // textArea.value += `\n`;
+        break;
+      case 'AltLeft':
+      // textArea.value += `\n`;
+        break;
+      case 'AltRight':
+      // textArea.value += `\n`;
+        break;
+      case 'Alt':
+        break;
+      case 'ArrowUp':
+        textArea.value += '\u2191';
+        break;
+      case 'ArrowLeft':
+        textArea.value += '\u2190';
+        break;
+      case 'ArrowDown':
+        textArea.value += '\u2193';
+        break;
+      case 'ArrowRight':
+        textArea.value += '\u2192';
+        break;
+      case 'Space':
+        textArea.value += ' ';
+        break;
+      default:
+        textArea.value += `${event.target.textContent}`;
+        break;
+    }
     event.target.classList.add('button-active');
+  }
+});
+
+textArea.addEventListener('blur', (event) => {
+  // console.log(event.target);
+  // console.log(event.target.classList.contains('text-area'));
+  if(event.target.classList.contains('text-area')) {
+    textArea.focus();
   }
 });
 
@@ -115,10 +185,41 @@ keyboard.addEventListener('mouseup', () => {
 });
 
 document.addEventListener('keydown', (event) => {
-  event.preventDefault();
-  btnActive = keyboardAllButtons.find((elem) => {
-    return elem.getAttribute('data-btn-name') === event.code || elem.getAttribute('data-btn-name') === event.key || elem.getAttribute('data-btn-name').toLocaleUpperCase() === event.key;
-  });
+  console.log(event.key);
+  console.log(event.code);
+  switch (event.key) {
+    case 'Tab':
+      event.preventDefault();
+      textArea.value += `\t`;
+    case 'Alt':
+      event.preventDefault();
+      break;
+    case 'Meta':
+      event.preventDefault();
+      break;
+    case 'ArrowUp':
+      event.preventDefault();
+      textArea.value += '\u2191';
+      break;
+    case 'ArrowLeft':
+      event.preventDefault();
+      textArea.value += '\u2190';
+      break;
+    case 'ArrowDown':
+      event.preventDefault();
+      textArea.value += '\u2193';
+      break;
+    case 'ArrowRight':
+      event.preventDefault();
+      textArea.value += '\u2192';
+      break;
+    default:
+      break;
+  }
+
+  textArea.focus();
+
+  btnActive = keyboardAllButtons.find((elem) => elem.getAttribute('data-btn-name') === event.code || elem.getAttribute('data-btn-name') === event.key || elem.getAttribute('data-btn-name').toLocaleUpperCase() === event.key);
 
   if (btnActive) {
     btnActive.classList.add('button-active');
