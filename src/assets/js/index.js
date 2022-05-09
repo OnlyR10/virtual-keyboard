@@ -199,6 +199,12 @@ keyboard.addEventListener('mousedown', (event) => {
   }
 });
 
+textArea.addEventListener('blur', (event) => {
+  if (event.target.classList.contains('text-area')) {
+    textArea.focus();
+  }
+});
+
 keyboard.addEventListener('mouseup', (event) => {
   for (let i = 0; i < keyboardAllButtons.length; i += 1) {
     keyboardAllButtons[i].classList.remove('button-active');
