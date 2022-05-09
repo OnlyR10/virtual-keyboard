@@ -100,17 +100,17 @@ if (keyboardLang === 'eng') {
 const buttonsChange = keyboard.querySelectorAll('.data-btn-change');
 const keyboardAllButtons = Array.from(keyboard.querySelectorAll('div'));
 
-// keyboard.addEventListener('mousedown', (event) => {
-//     if(event.target.classList.contains('button')) {
-//         textArea.focus();
-//         textArea.value += `${event.target.textContent}`;
-//     }
-// })
-
-keyboard.addEventListener('click', (event) => {
+keyboard.addEventListener('mousedown', (event) => {
   if (event.target.classList.contains('button')) {
     textArea.focus();
     textArea.value += `${event.target.textContent}`;
+    event.target.classList.add('button-active');
+  }
+});
+
+keyboard.addEventListener('mouseup', () => {
+  for (let i = 0; i < keyboardAllButtons.length; i += 1) {
+    keyboardAllButtons[i].classList.remove('button-active');
   }
 });
 
