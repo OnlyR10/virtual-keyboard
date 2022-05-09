@@ -1,17 +1,3 @@
-const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-const rusLetters = ['ё'];
-const engLetters = [];
-
-for (let i = 97; i < 123; i += 1) {
-  engLetters.push(String.fromCodePoint(i));
-}
-
-for (let i = 1072; i < 1104; i += 1) {
-  rusLetters.push(String.fromCodePoint(i));
-}
-
-const symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '\\', '|', ';', ':', '\'', '"', '/', ',', '<', '.', '>', '?'];
-
 const commands = [
   'Backspace', 'Tab', 'Delete', 'CapsLock', 'Enter', 'ShiftLeft', 'ArrowUp', 'ShiftRight',
   'ControlLeft', 'Win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight',
@@ -53,12 +39,12 @@ const allRusSymbolsInKeyBoard = ['ё', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '=', '
   'ShiftLeft', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', 'ArrowUp', 'ShiftRight',
   'ControlLeft', 'Win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'];
 
-const keyCodes = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9','Digit0', 'Minus', 'Equal',
-                  'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash',
-                  'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote',
-                  'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash'];
+const keyCodes = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal',
+  'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash',
+  'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote',
+  'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash'];
 
 export {
-  numbers, rusLetters, engLetters, symbols, commands, engLetterLayout, engLetterLayoutShift,
-  rusLetterLayout, rusLetterLayoutShift, allEngSymbolsInKeyBoard, allRusSymbolsInKeyBoard, keyCodes,
+  commands, engLetterLayout, engLetterLayoutShift, rusLetterLayout, rusLetterLayoutShift,
+  allEngSymbolsInKeyBoard, allRusSymbolsInKeyBoard, keyCodes,
 };

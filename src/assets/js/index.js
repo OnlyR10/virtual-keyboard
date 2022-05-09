@@ -1,7 +1,7 @@
 import '../styles/style.css';
 import {
-  numbers, rusLetters, engLetters, symbols, commands, engLetterLayout, engLetterLayoutShift,
-  rusLetterLayout, rusLetterLayoutShift, allEngSymbolsInKeyBoard, allRusSymbolsInKeyBoard,
+  commands, engLetterLayout, engLetterLayoutShift, rusLetterLayout, rusLetterLayoutShift,
+  allEngSymbolsInKeyBoard, allRusSymbolsInKeyBoard, keyCodes,
 } from './symbols';
 
 let keyboardLang = 'eng';
@@ -31,7 +31,7 @@ const combinationHint = document.createElement('p');
 combinationHint.classList.add('hint');
 combinationHint.textContent = 'Язык клавиатуры переключается комбинацией: "Ctrl" + "Alt"';
 
-function buildAKeyboard(languageLayout, letters) {
+function buildAKeyboard(languageLayout) {
   for (let i = 0; i < languageLayout.length; i += 1) {
     const button = document.createElement('div');
     button.classList.add('button');
@@ -51,29 +51,18 @@ function buildAKeyboard(languageLayout, letters) {
     }
     if (commands.includes(languageLayout[i])) {
       button.classList.add('button-commands');
-    }
-    if (numbers.includes(languageLayout[i])) {
+      button.setAttribute('data-btn-name', `${languageLayout[i]}`);
+    } else {
       button.classList.add('data-btn-change');
     }
-    if (symbols.includes(languageLayout[i])) {
-      button.classList.add('data-btn-change');
-    }
-    if (letters.includes(languageLayout[i])) {
-      button.classList.add('data-btn-change');
-    }
-    button.setAttribute('data-btn-name', `${languageLayout[i]}`);
     if (languageLayout[i] === 'ArrowRight') {
       button.textContent = 'Right';
-      button.classList.add('arrow-right');
     } else if (languageLayout[i] === 'ArrowLeft') {
       button.textContent = 'Left';
-      button.classList.add('arrow-left');
     } else if (languageLayout[i] === 'ArrowDown') {
       button.textContent = 'Down';
-      button.classList.add('arrow-down');
     } else if (languageLayout[i] === 'ArrowUp') {
       button.textContent = 'Up';
-      button.classList.add('arrow-up');
     } else if (languageLayout[i] === 'Space') {
       button.textContent = '';
     } else if (languageLayout[i] === 'Delete') {
@@ -92,30 +81,33 @@ function buildAKeyboard(languageLayout, letters) {
 }
 
 if (keyboardLang === 'eng') {
-  buildAKeyboard(allEngSymbolsInKeyBoard, engLetters);
+  buildAKeyboard(allEngSymbolsInKeyBoard);
 } else if (keyboardLang === 'rus') {
-  buildAKeyboard(allRusSymbolsInKeyBoard, rusLetters);
+  buildAKeyboard(allRusSymbolsInKeyBoard);
 }
 
-const buttonsChange = keyboard.querySelectorAll('.data-btn-change');
 const keyboardAllButtons = Array.from(keyboard.querySelectorAll('div'));
+const buttonsChange = keyboard.querySelectorAll('.data-btn-change');
+for (let i = 0; i < buttonsChange.length; i += 1) {
+  buttonsChange[i].setAttribute('data-btn-name', `${keyCodes[i]}`);
+}
 
 keyboard.addEventListener('mousedown', (event) => {
   if (event.target.classList.contains('button')) {
     textArea.focus();
     switch (event.target.getAttribute('data-btn-name')) {
       case 'Backspace':
-        if(textArea.selectionStart === textArea.selectionEnd) {
+        if (textArea.selectionStart === textArea.selectionEnd) {
           textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionStart);
         } else {
           textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd);
         }
         break;
       case 'Tab':
-        textArea.value += `\t`;
+        textArea.setRangeText('\t', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       case 'Delete':
-        if(textArea.selectionStart === textArea.selectionEnd) {
+        if (textArea.selectionStart === textArea.selectionEnd) {
           textArea.setRangeText('', textArea.selectionStart, textArea.selectionStart + 1);
         } else {
           textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd);
@@ -125,7 +117,7 @@ keyboard.addEventListener('mousedown', (event) => {
       // textArea.value += `\n`;
         break;
       case 'Enter':
-        textArea.value += `\n`;
+        textArea.setRangeText('\n', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       case 'ShiftLeft':
       // textArea.value += `\n`;
@@ -145,25 +137,23 @@ keyboard.addEventListener('mousedown', (event) => {
       case 'AltRight':
       // textArea.value += `\n`;
         break;
-      case 'Alt':
-        break;
       case 'ArrowUp':
-        textArea.value += '\u2191';
+        textArea.setRangeText('\u2191', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       case 'ArrowLeft':
-        textArea.value += '\u2190';
+        textArea.setRangeText('\u2190', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       case 'ArrowDown':
-        textArea.value += '\u2193';
+        textArea.setRangeText('\u2193', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       case 'ArrowRight':
-        textArea.value += '\u2192';
+        textArea.setRangeText('\u2192', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       case 'Space':
-        textArea.value += ' ';
+        textArea.setRangeText(' ', textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
       default:
-        textArea.value += `${event.target.textContent}`;
+        textArea.setRangeText(`${event.target.textContent}`, textArea.selectionStart, textArea.selectionEnd, 'end');
         break;
     }
     event.target.classList.add('button-active');
@@ -171,9 +161,7 @@ keyboard.addEventListener('mousedown', (event) => {
 });
 
 textArea.addEventListener('blur', (event) => {
-  // console.log(event.target);
-  // console.log(event.target.classList.contains('text-area'));
-  if(event.target.classList.contains('text-area')) {
+  if (event.target.classList.contains('text-area')) {
     textArea.focus();
   }
 });
@@ -185,12 +173,11 @@ keyboard.addEventListener('mouseup', () => {
 });
 
 document.addEventListener('keydown', (event) => {
-  console.log(event.key);
-  console.log(event.code);
   switch (event.key) {
     case 'Tab':
       event.preventDefault();
-      textArea.value += `\t`;
+      textArea.value += '\t';
+      break;
     case 'Alt':
       event.preventDefault();
       break;
@@ -219,7 +206,7 @@ document.addEventListener('keydown', (event) => {
 
   textArea.focus();
 
-  btnActive = keyboardAllButtons.find((elem) => elem.getAttribute('data-btn-name') === event.code || elem.getAttribute('data-btn-name') === event.key || elem.getAttribute('data-btn-name').toLocaleUpperCase() === event.key);
+  btnActive = keyboardAllButtons.find((elem) => elem.getAttribute('data-btn-name') === event.code);
 
   if (btnActive) {
     btnActive.classList.add('button-active');
@@ -229,44 +216,20 @@ document.addEventListener('keydown', (event) => {
     if (keyboardLang === 'eng') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(engLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
-          }
-          if (numbers.includes(engLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
-          }
           buttonsChange[i].textContent = engLetterLayoutShift[i].toLowerCase();
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(engLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
-          }
-          if (numbers.includes(engLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayoutShift[i]}`);
-          }
           buttonsChange[i].textContent = engLetterLayoutShift[i].toUpperCase();
         }
       }
     } else if (keyboardLang === 'rus') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(rusLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
-          }
-          if (numbers.includes(rusLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
-          }
           buttonsChange[i].textContent = rusLetterLayoutShift[i].toLowerCase();
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(rusLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
-          }
-          if (numbers.includes(rusLetterLayoutShift[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayoutShift[i]}`);
-          }
           buttonsChange[i].textContent = rusLetterLayoutShift[i].toUpperCase();
         }
       }
@@ -332,12 +295,6 @@ document.addEventListener('keyup', (event) => {
     if (keyboardLang === 'eng') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(engLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
-          }
-          if (numbers.includes(engLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
-          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = engLetterLayout[i];
           } else {
@@ -346,12 +303,6 @@ document.addEventListener('keyup', (event) => {
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(engLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
-          }
-          if (numbers.includes(engLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${engLetterLayout[i]}`);
-          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = engLetterLayout[i];
           } else {
@@ -362,12 +313,6 @@ document.addEventListener('keyup', (event) => {
     } else if (keyboardLang === 'rus') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(rusLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
-          }
-          if (numbers.includes(rusLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
-          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = rusLetterLayout[i];
           } else {
@@ -376,12 +321,6 @@ document.addEventListener('keyup', (event) => {
         }
       } else {
         for (let i = 0; i < buttonsChange.length; i += 1) {
-          if (symbols.includes(rusLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
-          }
-          if (numbers.includes(rusLetterLayout[i])) {
-            buttonsChange[i].setAttribute('data-btn-name', `${rusLetterLayout[i]}`);
-          }
           if (typeof engLetterLayout[i] === 'number') {
             buttonsChange[i].textContent = rusLetterLayout[i];
           } else {

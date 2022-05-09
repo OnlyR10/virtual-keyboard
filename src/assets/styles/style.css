@@ -75,22 +75,6 @@
     }
 }
 
-.arrow-up {
-    background-image: url(../icons/UpWhite.svg);
-}
-
-.arrow-left {
-    background-image: url(../icons/LeftWhite.svg);
-}
-
-.arrow-right {
-    background-image: url(../icons/RightWhite.svg);
-}
-
-.arrow-down {
-    background-image: url(../icons/DownWhite.svg);
-}
-
 .hint {
   margin: 0 auto;
   padding: 5px;
