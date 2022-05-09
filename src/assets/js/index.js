@@ -1,57 +1,18 @@
 import '../styles/style.css';
+import {
+  numbers, rusLetters, engLetters, symbols, commands, engLetterLayout, engLetterLayoutShift,
+  rusLetterLayout, rusLetterLayoutShift, allEngSymbolsInKeyBoard, allRusSymbolsInKeyBoard,
+} from './symbols';
 
 let keyboardLang = 'eng';
 let capsLockActive = false;
 let btnActive = null;
 
-const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-const rusLetters = [];
-const engLetters = [];
-
-for (let i = 97; i < 123; i += 1) {
-  engLetters.push(String.fromCodePoint(i));
+const objUser = {};
+const storageKey = 'objUserkeyboardLang';
+if (localStorage.getItem(storageKey)) {
+  keyboardLang = JSON.parse(localStorage.getItem(storageKey)).keyboardLang;
 }
-
-for (let i = 1072; i < 1104; i += 1) {
-  rusLetters.push(String.fromCodePoint(i));
-}
-
-const symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '\\', '|', ';', ':', '\'', '"', '/', ',', '<', '.', '>', '?'];
-
-const commands = [
-  'Backspace', 'Tab', 'Delete', 'CapsLock', 'Enter', 'ShiftLeft', 'ArrowUp', 'ShiftRight',
-  'ControlLeft', 'Win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight',
-];
-
-const engLetterLayout = [
-  '`', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '=',
-  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',
-  '\\', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'',
-  'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'];
-
-const engLetterLayoutShift = [
-  '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
-  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '{', '}', '|',
-  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '"',
-  'z', 'x', 'c', 'v', 'b', 'n', 'm', '<', '>', '?'];
-
-const rusLetterLayout = [
-  'ё', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '=',
-  'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\',
-  'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э',
-  'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.'];
-
-const rusLetterLayoutShift = [
-  'ё', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
-  'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '/',
-  'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э',
-  'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', ','];
-
-const allSymbolsInKeyBoard = ['`', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '=', 'Backspace',
-  'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Delete',
-  'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter',
-  'ShiftLeft', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'ArrowUp', 'ShiftRight',
-  'ControlLeft', 'Win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'];
 
 const wrapper = document.createElement('div');
 wrapper.classList.add('wrapper');
@@ -62,62 +23,70 @@ textArea.classList.add('text-area');
 const keyboard = document.createElement('div');
 keyboard.classList.add('keyboard');
 
-for (let i = 0; i < allSymbolsInKeyBoard.length; i += 1) {
-  const button = document.createElement('div');
-  button.classList.add('button');
-  switch (allSymbolsInKeyBoard[i]) {
-    case 'Backspace':
-    case 'CapsLock':
-    case 'Enter':
-    case 'ShiftLeft':
-    case 'ShiftRight':
-      button.classList.add('double-width');
-      break;
-    case 'Space':
-      button.classList.add('space-width');
-      break;
-    default:
-      break;
+function buildAKeyboard(languageLayout, letters) {
+  for (let i = 0; i < languageLayout.length; i += 1) {
+    const button = document.createElement('div');
+    button.classList.add('button');
+    switch (languageLayout[i]) {
+      case 'Backspace':
+      case 'CapsLock':
+      case 'Enter':
+      case 'ShiftLeft':
+      case 'ShiftRight':
+        button.classList.add('double-width');
+        break;
+      case 'Space':
+        button.classList.add('space-width');
+        break;
+      default:
+        break;
+    }
+    if (commands.includes(languageLayout[i])) {
+      button.classList.add('button-commands');
+    }
+    if (numbers.includes(languageLayout[i])) {
+      button.classList.add('data-btn-change');
+    }
+    if (symbols.includes(languageLayout[i])) {
+      button.classList.add('data-btn-change');
+    }
+    if (letters.includes(languageLayout[i])) {
+      button.classList.add('data-btn-change');
+    }
+    button.setAttribute('data-btn-name', `${languageLayout[i]}`);
+    if (languageLayout[i] === 'ArrowRight') {
+      button.textContent = 'Right';
+      button.classList.add('arrow-right');
+    } else if (languageLayout[i] === 'ArrowLeft') {
+      button.textContent = 'Left';
+      button.classList.add('arrow-left');
+    } else if (languageLayout[i] === 'ArrowDown') {
+      button.textContent = 'Down';
+      button.classList.add('arrow-down');
+    } else if (languageLayout[i] === 'ArrowUp') {
+      button.textContent = 'Up';
+      button.classList.add('arrow-up');
+    } else if (languageLayout[i] === 'Space') {
+      button.textContent = '';
+    } else if (languageLayout[i] === 'Delete') {
+      button.textContent = 'Del';
+    } else if (languageLayout[i] === 'ShiftLeft' || languageLayout[i] === 'ShiftRight') {
+      button.textContent = 'Shift';
+    } else if (languageLayout[i] === 'ControlLeft' || languageLayout[i] === 'ControlRight') {
+      button.textContent = 'Ctrl';
+    } else if (languageLayout[i] === 'AltLeft' || languageLayout[i] === 'AltRight') {
+      button.textContent = 'Alt';
+    } else {
+      button.textContent = `${languageLayout[i]}`;
+    }
+    keyboard.append(button);
   }
-  if (commands.includes(allSymbolsInKeyBoard[i])) {
-    button.classList.add('button-commands');
-  }
-  if (numbers.includes(allSymbolsInKeyBoard[i])) {
-    button.classList.add('data-btn-change');
-  }
-  if (symbols.includes(allSymbolsInKeyBoard[i])) {
-    button.classList.add('data-btn-change');
-  }
-  if (engLetters.includes(allSymbolsInKeyBoard[i])) {
-    button.classList.add('data-btn-change');
-  }
-  button.setAttribute('data-btn-name', `${allSymbolsInKeyBoard[i]}`);
-  if (allSymbolsInKeyBoard[i] === 'ArrowRight') {
-    button.textContent = 'Right';
-    button.classList.add('arrow-right');
-  } else if (allSymbolsInKeyBoard[i] === 'ArrowLeft') {
-    button.textContent = 'Left';
-    button.classList.add('arrow-left');
-  } else if (allSymbolsInKeyBoard[i] === 'ArrowDown') {
-    button.textContent = 'Down';
-    button.classList.add('arrow-down');
-  } else if (allSymbolsInKeyBoard[i] === 'ArrowUp') {
-    button.textContent = 'Up';
-    button.classList.add('arrow-up');
-  } else if (allSymbolsInKeyBoard[i] === 'Space') {
-    button.textContent = '';
-  } else if (allSymbolsInKeyBoard[i] === 'Delete') {
-    button.textContent = 'Del';
-  } else if (allSymbolsInKeyBoard[i] === 'ShiftLeft' || allSymbolsInKeyBoard[i] === 'ShiftRight') {
-    button.textContent = 'Shift';
-  } else if (allSymbolsInKeyBoard[i] === 'ControlLeft' || allSymbolsInKeyBoard[i] === 'ControlRight') {
-    button.textContent = 'Ctrl';
-  } else if (allSymbolsInKeyBoard[i] === 'AltLeft' || allSymbolsInKeyBoard[i] === 'AltRight') {
-    button.textContent = 'Alt';
-  } else {
-    button.textContent = `${allSymbolsInKeyBoard[i]}`;
-  }
-  keyboard.append(button);
+}
+
+if (keyboardLang === 'eng') {
+  buildAKeyboard(allEngSymbolsInKeyBoard, engLetters);
+} else if (keyboardLang === 'rus') {
+  buildAKeyboard(allRusSymbolsInKeyBoard, rusLetters);
 }
 
 const buttonsChange = keyboard.querySelectorAll('.data-btn-change');
@@ -142,6 +111,7 @@ document.addEventListener('keydown', (event) => {
   btnActive = keyboardAllButtons.find((elem) => {
     return elem.getAttribute('data-btn-name') === event.code || elem.getAttribute('data-btn-name') === event.key || elem.getAttribute('data-btn-name').toLocaleUpperCase() === event.key;
   });
+
   if (btnActive) {
     btnActive.classList.add('button-active');
   }
@@ -206,6 +176,7 @@ document.addEventListener('keydown', (event) => {
         }
       }
       keyboardLang = 'rus';
+      objUser.keyboardLang = 'rus';
     } else if (keyboardLang === 'rus') {
       if (capsLockActive) {
         for (let i = 0; i < buttonsChange.length; i += 1) {
@@ -217,7 +188,9 @@ document.addEventListener('keydown', (event) => {
         }
       }
       keyboardLang = 'eng';
+      objUser.keyboardLang = 'eng';
     }
+    localStorage.setItem(storageKey, JSON.stringify(objUser));
   }
 
   if (event.key === 'CapsLock') {
